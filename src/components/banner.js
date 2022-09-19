@@ -1,8 +1,6 @@
 import React from "react";
-import { Typography } from "@mui/material";
-import Button from "@material-ui/core/Button";
 
-const home = () => {
+export const Banner = () => {
   return (
     <>
       <div>
@@ -21,5 +19,4 @@ const home = () => {
     </>
   );
 };
-
-export default home;
+export default Banner;
