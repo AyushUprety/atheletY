@@ -2,13 +2,21 @@ import React from "react";
 import { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@material-ui/core/Button";
-import FetchData from "../utils/fetchdata";
+import { FetchData, exerciseOptions } from "../utils/fetchdata";
 
 const SearchExercises = () => {
   const [exercises, setExercises] = useState("");
-  const fetchApiData = FetchData(
-    "https://exercisedb.p.rapidapi.com/exercises/bodyPartList"
-  );
+
+  const fetchApiData = async () => {
+    if (exercises) {
+      const exerciseData = await FetchData(
+        "https://exercisedb.p.rapidapi.com/exercises",
+        exerciseOptions
+      );
+      console.log(exerciseData);
+    }
+  };
+
   return (
     <div
       style={{
@@ -21,13 +29,14 @@ const SearchExercises = () => {
       <TextField
         sx={{ width: "60%" }}
         value={exercises}
-        onChange={(e) => setExercises(e.target.value)}
+        onChange={(e) => setExercises(e.target.value.toLowerCase())}
+        type="text"
       />
       <Button
         style={{ width: "8%" }}
         variant="contained"
         color="secondary"
-        onClick={() => fetchApiData}
+        onClick={() => fetchApiData()}
       >
         Search
       </Button>
