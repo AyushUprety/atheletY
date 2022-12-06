@@ -11,7 +11,7 @@ const navbar = () => {
       direction="row"
       justifyContent="flex-start"
       alignItems="center"
-      sx={{ gap: { xs: "50px", sm: "80px", md: "100px", lg: "120px" } }}
+      sx={{ gap: { xs: "50px", sm: "80px", md: "100px", gl: "120px" } }}
     >
       <Link to="/">
         <img src={Body} width="65" height="65" />
