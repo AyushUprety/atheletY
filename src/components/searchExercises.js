@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button"
 import { exerciseData, exerciseoptions } from "../utils/fetchdata"
 import Scrollbar from "../components/scrollbar"
 import { Box, Stack } from "@mui/system"
+import { Workoutlist } from "./workoutlist"
 
 const SearchExercises = ({ bodyPart, setBodyPart }) => {
   const [exercises, setExercises] = useState("") // search ko lagi state
@@ -91,6 +92,12 @@ const SearchExercises = ({ bodyPart, setBodyPart }) => {
           bodyParts={bodyParts}
           bodyPart={bodyPart} // Note we only had bodyParts plural jasla array of bodypart linxa.This bodypart is for the individual bodypart selected
           setBodyPart={setBodyPart}
+        />
+      </Box>
+      <Box>
+        <Workoutlist
+          exercisesList={exercisesList}
+          setExercisesList={setExerciseList}
         />
       </Box>
     </Stack>
