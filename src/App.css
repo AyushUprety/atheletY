@@ -1,6 +1,10 @@
 body {
     font-family: 'Josefin Sans';
     background-color: #FFFAFB;
+
+    .w-50{
+      width:'50% !important'
+    }
   }
   
   * {
@@ -144,3 +148,4 @@ body {
       width: 280px;
     }
   }
+

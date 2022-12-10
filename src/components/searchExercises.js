@@ -1,46 +1,45 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import TextField from "@mui/material/TextField";
-import Button from "@material-ui/core/Button";
-import { exerciseData, exerciseoptions } from "../utils/fetchdata";
-import Scrollbar from "../components/scrollbar";
-import { Box, Stack } from "@mui/system";
+import React from "react"
+import { useState, useEffect } from "react"
+import TextField from "@mui/material/TextField"
+import Button from "@material-ui/core/Button"
+import { exerciseData, exerciseoptions } from "../utils/fetchdata"
+import Scrollbar from "../components/scrollbar"
+import { Box, Stack } from "@mui/system"
 
 const SearchExercises = ({ bodyPart, setBodyPart }) => {
-  const [exercises, setExercises] = useState("");
-  const [exercisesList, setExerciseList] = useState([]);
-  const [bodyParts, setBodyParts] = useState([]);
+  const [exercises, setExercises] = useState("") // search ko lagi state
+  const [exercisesList, setExerciseList] = useState([]) // exercise store garna state
+  const [bodyParts, setBodyParts] = useState([]) // bodypart store garna state
 
   useEffect(() => {
     const fetchBodyParts = async () => {
       const bodyparts = await exerciseData(
         "https://exercisedb.p.rapidapi.com/exercises/bodyPartList",
         exerciseoptions
-      );
-      setBodyParts(bodyparts);
-    };
-    fetchBodyParts();
-    console.log(bodyParts);
-  }, []);
+      )
+      console.log(bodyparts)
+      setBodyParts([...bodyparts]) // setBodyParts(bodyparts) matra garis vana ta tero argument aauta whole array aako xa yo whole array nai aauta matra argument banera save hunxa.Array ko element lai seperate garerea bekla beklai element banauna spread operator use gareko ho
+    }
+    fetchBodyParts()
+  }, [])
 
   const fetchApiData = async () => {
     if (exercises) {
       const showData = await exerciseData(
         "https://exercisedb.p.rapidapi.com/exercises",
         exerciseoptions
-      );
+      )
       const filteredlist = showData.filter(
         (exercise) =>
           exercise.name.toLowerCase().includes(exercises) ||
           exercise.target.toLowerCase().includes(exercises) ||
           exercise.equipment.toLowerCase().includes(exercises) ||
           exercise.bodyPart.toLowerCase().includes(exercises)
-      );
-      setExercises("");
-      setExerciseList(filteredlist);
-      console.log(exercisesList);
+      )
+      setExerciseList(filteredlist)
+      console.log(exercisesList)
     }
-  };
+  }
 
   // useEffect(
   //   (exercisesList) => {
@@ -57,17 +56,15 @@ const SearchExercises = ({ bodyPart, setBodyPart }) => {
   //   return filteredlist;
   // };
   return (
-    <Stack
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        position: "relative",
-        right: "0px",
-      }}
-    >
+    <Stack alignItems="center" mt="37px" justifyContent="center" p="20px">
       <Box position="relative" display="flex" justifyContent="center" mb="72px">
         <TextField
-          sx={{ width: "60%" }}
+          sx={{
+            input: { fontWeight: "700", border: "none", borderRadius: "4px" },
+            width: { lg: "1170px", xs: "350px" },
+            backgroundColor: "#fff",
+            borderRadius: "40px",
+          }}
           value={exercises} // value vaneko xi jasto state la state ma value ta rakhyo tara tyo form ma render garna xi you use this
           onChange={(e) => setExercises(e.target.value.toLowerCase())}
           type="text"
@@ -92,12 +89,12 @@ const SearchExercises = ({ bodyPart, setBodyPart }) => {
       <Box sx={{ position: "relative", width: "100%", p: "20px" }}>
         <Scrollbar
           bodyParts={bodyParts}
-          bodyPart={bodyPart}
+          bodyPart={bodyPart} // Note we only had bodyParts plural jasla array of bodypart linxa.This bodypart is for the individual bodypart selected
           setBodyPart={setBodyPart}
         />
       </Box>
     </Stack>
-  );
-};
+  )
+}
 
-export default SearchExercises;
+export default SearchExercises
