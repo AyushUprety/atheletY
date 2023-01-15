@@ -14,6 +14,7 @@ const SearchExercises = ({ bodyPart, setBodyPart }) => {
 
   useEffect(() => {
     const fetchBodyParts = async () => {
+      // The reason for using async is because await can only be used with async function
       const bodyparts = await exerciseData(
         "https://exercisedb.p.rapidapi.com/exercises/bodyPartList",
         exerciseoptions
