@@ -25,7 +25,7 @@ const ExerciseDetail = () => {
 
   return (
     <div>
-      <Detail bodyPart={data.bodyPart} name={data.name} icon={data.gifUrl} />
+      <Detail exercisedata={data} />
       <ExerciseVideos />
       <SimiliarPart />
     </div>
