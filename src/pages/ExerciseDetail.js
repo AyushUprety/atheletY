@@ -1,34 +1,69 @@
-import React from "react"
-import Detail from "../components/detail"
-import SimiliarPart from "../components/SimiliarPart"
-import ExerciseVideos from "../components/ExerciseVideos"
-import { exerciseData } from "../utils/fetchdata"
-import { exerciseoptions } from "../utils/fetchdata"
+import React, { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import { useState } from "react"
-import { useEffect } from "react"
+import { Box } from "@mui/material"
+
+import {
+  exerciseoptions,
+  exerciseData,
+  youtubeOptions,
+} from "../utils/fetchData"
+import Detail from "../components/detail"
+import ExerciseVideos from "../components/ExerciseVideos"
+import SimilarExercises from "../components/SimiliarPart"
 
 const ExerciseDetail = () => {
-  const { id } = useParams() // useEffect use na garda infinte loop ma gako thiyo yo code.What happened was first fetchdata was executed.At execution it changed the state.Now, when state is changed component rerenders.When component is rendered again fetchdata function is called which again changed state due to which component is rendered agian.So first ma null state after this function runs.state value is updated.Now,again from top to bottom code is executed.As a result state again becomes null. This process continues infinetely.
-  const [data, setData] = useState("")
+  const [exerciseDetail, setExerciseDetail] = useState({})
+  const [exerciseVideos, setExerciseVideos] = useState([])
+  const [targetMuscleExercises, setTargetMuscleExercises] = useState([])
+  const [equipmentExercises, setEquipmentExercises] = useState([])
+  const { id } = useParams()
+
   useEffect(() => {
-    const fetchdata = async () => {
-      const response = await exerciseData(
-        `https://exercisedb.p.rapidapi.com/exercises/exercise/${id}`,
+    window.scrollTo({ top: 0, behavior: "smooth" })
+
+    const fetchExercisesData = async () => {
+      const exerciseDbUrl = "https://exercisedb.p.rapidapi.com"
+      const youtubeSearchUrl =
+        "https://youtube-search-and-download.p.rapidapi.com"
+
+      const exerciseDetailData = await exerciseData(
+        `${exerciseDbUrl}/exercises/exercise/${id}`,
         exerciseoptions
       )
-      console.log(response)
-      setData(response)
+      setExerciseDetail(exerciseDetailData)
+
+      const exerciseVideosData = await exerciseData(
+        `${youtubeSearchUrl}/search?query=${exerciseDetailData.name} exercise`,
+        youtubeOptions
+      )
+      setExerciseVideos(exerciseVideosData.contents)
+
+      const targetMuscleExercisesData = await exerciseData(
+        `${exerciseDbUrl}/exercises/target/${exerciseDetailData.target}`,
+        exerciseoptions
+      )
+      setTargetMuscleExercises(targetMuscleExercisesData)
+
+      const equimentExercisesData = await exerciseData(
+        `${exerciseDbUrl}/exercises/equipment/${exerciseDetailData.equipment}`,
+        exerciseoptions
+      )
+      setEquipmentExercises(equimentExercisesData)
     }
-    fetchdata()
+
+    fetchExercisesData()
   }, [id])
 
+  if (!exerciseDetail) return <div>No Data</div>
+
   return (
-    <div>
-      <Detail exercisedata={data} />
-      <ExerciseVideos />
-      <SimiliarPart />
-    </div>
+    <Box sx={{ mt: { lg: "96px", xs: "60px" } }}>
+      <Detail exercisedata={exerciseDetail} />
+      <ExerciseVideos
+        exerciseVideos={exerciseVideos}
+        name={exerciseDetail.name}
+      />
+    </Box>
   )
 }
 
